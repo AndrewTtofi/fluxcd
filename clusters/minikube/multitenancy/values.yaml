@@ -1,7 +1,0 @@
-application:
-  name: app
-
-namespaces:
-  a: team-a
-  b: team-b
-  org: cecg
