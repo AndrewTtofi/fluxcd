@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.org }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/resource-policy": keep
+---
+apiVersion: hnc.x-k8s.io/v1alpha2
+kind: HierarchyConfiguration
+metadata:
+  generation: 1
+  name: hierarchy
+  namespace: {{ .Values.namespaces.org }}
+  annotations:
+    "helm.sh/hook": post-install  
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.a }}
+---
+apiVersion: hnc.x-k8s.io/v1alpha2
+kind: HierarchyConfiguration
+metadata:
+  generation: 2
+  name: hierarchy
+  namespace: {{ .Values.namespaces.a }}
+  annotations:
+    "helm.sh/hook": post-install  
+spec:
+  parent: {{ .Values.namespaces.org }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.b }}
+---
+apiVersion: hnc.x-k8s.io/v1alpha2
+kind: HierarchyConfiguration
+metadata:
+  generation: 2
+  name: hierarchy
+  namespace: {{ .Values.namespaces.b }}
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  parent: {{ .Values.namespaces.org }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.application.name }}-1
+---
+apiVersion: hnc.x-k8s.io/v1alpha2
+kind: HierarchyConfiguration
+metadata:
+  generation: 3
+  name: hierarchy
+  namespace: {{ .Values.application.name }}-1
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  parent: {{ .Values.namespaces.a }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.application.name }}-2
+---
+apiVersion: hnc.x-k8s.io/v1alpha2
+kind: HierarchyConfiguration
+metadata:
+  generation: 3
+  name: hierarchy
+  namespace: {{ .Values.application.name }}-2
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  parent: {{ .Values.namespaces.a }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.a }}-monitoring
+---
+apiVersion: hnc.x-k8s.io/v1alpha2
+kind: HierarchyConfiguration
+metadata:
+  generation: 3
+  name: hierarchy
+  namespace: {{ .Values.namespaces.a }}-monitoring
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  parent: {{ .Values.namespaces.a }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.b }}-monitoring
+---
+apiVersion: hnc.x-k8s.io/v1alpha2
+kind: HierarchyConfiguration
+metadata:
+  generation: 3
+  name: hierarchy
+  namespace: {{ .Values.namespaces.b }}-monitoring
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  parent: {{ .Values.namespaces.b }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.application.name }}-3
+---
+apiVersion: hnc.x-k8s.io/v1alpha2
+kind: HierarchyConfiguration
+metadata:
+  generation: 3
+  name: hierarchy
+  namespace: {{ .Values.application.name }}-3
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  parent: {{ .Values.namespaces.b }}
